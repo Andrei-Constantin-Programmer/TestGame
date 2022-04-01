@@ -3,7 +3,7 @@ using namespace std;
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "shaderClass.h"
+#include "ShaderClass.h"
 #include "VAO.h"
 #include "VBO.h"
 #include "EBO.h"
@@ -11,12 +11,13 @@ using namespace std;
 // Vertices coordinates
 GLfloat vertices[] =
 {
-	-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
-	0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
-	0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f, // Upper corner
-	-0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner left
-	0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // Inner right
-	0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f // Inner down
+	//				COORDINATES								COLOURS
+	-0.50f, -0.5f * float(sqrt(3)) / 3,     0.0f,    0.80f, 0.30f, 0.02f,// Lower left corner
+	 0.50f, -0.5f * float(sqrt(3)) / 3,     0.0f,    0.80f, 0.30f, 0.02f,// Lower right corner
+	 0.00f,  0.5f * float(sqrt(3)) * 2 / 3, 0.0f,    1.00f, 0.60f, 0.32f,// Upper corner
+	-0.25f,  0.5f * float(sqrt(3)) / 6,     0.0f,    0.90f, 0.40f, 0.17f,// Inner left
+	 0.25f,  0.5f * float(sqrt(3)) / 6,     0.0f,    0.50f, 0.40f, 0.17f,// Inner right
+	 0.00f, -0.5f * float(sqrt(3)) / 3,     0.0f,    0.80f, 0.30f, 0.02f// Inner down
 };
 
 // Indices for vertices order
@@ -73,13 +74,17 @@ int main()
 	EBO EBO(indices, sizeof(indices));
 
 	//Link VBO to VAO
-	VAO.LinkVBO(VBO, 0);
+	VAO.LinkAttrib(VBO, 0, 3, GL_FLOAT, 6*sizeof(float), (void*)0);
+	VAO.LinkAttrib(VBO, 1, 3, GL_FLOAT, 6*sizeof(float), (void*)(3*sizeof(float)));
+	 
 
 	//Unbind the VAO, VBO and EBO (to prevent modification)
 	VAO.Unbind();
 	VBO.Unbind();
 	EBO.Unbind();
 
+	//Get the id of the uniform called "scale"
+	GLuint uniId = glGetUniformLocation(shaderProgram.id, "scale");
 
 	// The main while loop
 	while (!glfwWindowShouldClose(window))
@@ -91,6 +96,8 @@ int main()
 
 		//Tell OpenGL what shader program to use
 		shaderProgram.Activate();
+
+		glUniform1f(uniId, 0.25f);
 		//Bind the VAO (so that OpenGL knows to use it)
 		VAO.Bind();
 
