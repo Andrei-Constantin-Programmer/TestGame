@@ -11,7 +11,7 @@ using namespace std;
 // Vertices coordinates
 GLfloat vertices[] =
 {
-	//				COORDINATES								COLOURS
+	//				 COORDINATES								COLOURS
 	-0.50f, -0.5f * float(sqrt(3)) / 3,     0.0f,    0.80f, 0.30f, 0.02f,// Lower left corner
 	 0.50f, -0.5f * float(sqrt(3)) / 3,     0.0f,    0.80f, 0.30f, 0.02f,// Lower right corner
 	 0.00f,  0.5f * float(sqrt(3)) * 2 / 3, 0.0f,    1.00f, 0.60f, 0.32f,// Upper corner
