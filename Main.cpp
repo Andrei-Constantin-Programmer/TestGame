@@ -1,4 +1,3 @@
-using namespace std;
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -35,10 +34,8 @@ GLuint indices[] =
 	3, 0, 4
 };
 
-
 const unsigned int width = 800;
 const unsigned int height = 800;
-
 
 int main()
 {
@@ -107,7 +104,6 @@ int main()
 	double prevTime = glfwGetTime();
 
 	glEnable(GL_DEPTH_TEST);
-
 
 	// The main while loop
 	while (!glfwWindowShouldClose(window))
