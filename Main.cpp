@@ -1,3 +1,4 @@
+using namespace std;
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -11,6 +12,7 @@
 #include "VAO.h"
 #include "VBO.h"
 #include "EBO.h"
+#include "Camera.h"
 
 // Vertices of coordinates
 GLfloat vertices[] =
@@ -93,17 +95,13 @@ int main()
 	VBO.Unbind();
 	EBO.Unbind();
 
-	//Get the id of the uniform called "scale"
-	GLuint uniId = glGetUniformLocation(shaderProgram.id, "scale");
-
 	//Texture
 	Texture block("dirt.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 	block.textureUnit(shaderProgram, "tex0", 0);
 
-	float rotation = 0.0f;
-	double prevTime = glfwGetTime();
-
 	glEnable(GL_DEPTH_TEST);
+
+	Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
 
 	// The main while loop
 	while (!glfwWindowShouldClose(window))
@@ -116,33 +114,14 @@ int main()
 		//Tell OpenGL what shader program to use
 		shaderProgram.Activate();
 
-		double currentTime = glfwGetTime();
-		if (currentTime - prevTime >= (float)1 / 60)
-		{
-			rotation += 0.5f;
-			prevTime = currentTime;
-		}
+		//Check for inputs
+		camera.Inputs(window);
 
-		//Initialise matrices
-		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 proj = glm::mat4(1.0f);
-
-		//Position the matrices
-		model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 1.0f, 0.0f));
-		view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
-		proj = glm::perspective(glm::radians(45.0f), (float)width / height, 0.1f, 100.0f);
-
-		//Input the matrices into the Vertex Shader
-		int modelLocation = glGetUniformLocation(shaderProgram.id, "model");
-		glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
-		int viewLocation = glGetUniformLocation(shaderProgram.id, "view");
-		glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
-		int projLocation = glGetUniformLocation(shaderProgram.id, "proj");
-		glUniformMatrix4fv(projLocation, 1, GL_FALSE, glm::value_ptr(proj));
+		//
+		camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "cameraMatrix");
 
 
-		glUniform1f(uniId, 0.5f);
+		//Bind the texture
 		block.Bind();
 		//Bind the VAO (so that OpenGL knows to use it)
 		VAO.Bind();
@@ -158,6 +137,7 @@ int main()
 	}
 
 
+	
 
 	//Delete the shader-related objects
 	VAO.Delete();
