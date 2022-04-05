@@ -137,8 +137,6 @@ int main()
 	}
 
 
-	
-
 	//Delete the shader-related objects
 	VAO.Delete();
 	VBO.Delete();
