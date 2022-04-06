@@ -160,6 +160,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="default.frag" />
+    <None Include="light.frag" />
+    <None Include="light.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -171,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="C:\Users\Andrei\Desktop\dirt.jpg" />
+    <Image Include="C:\Users\Andrei\Desktop\sandstone.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
